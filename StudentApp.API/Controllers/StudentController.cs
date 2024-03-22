@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.API.Common;
+using StudentApp.Core.Feature.Student.Delete;
 using StudentApp.Core.Feature.Student.Post;
 using StudentApp.Core.Feature.Student.Put;
 
@@ -30,6 +31,10 @@ namespace StudentApp.API.Controllers
             return Ok(APIResponse<PutStudentResponse>.Success(await _mediator.Send(command), ""));
         }
 
-        []
+        [HttpDelete(Name = "DeleteStudent")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            return Ok(APIResponse<DeleteStudentResponse>.Success(await _mediator.Send(new DeleteStudentCommand { Id = id }), ""));
+        }
     }
 }

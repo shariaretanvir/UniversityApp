@@ -1,14 +1,6 @@
 ﻿using MapsterMapper;
 using MediatR;
 using StudentApp.Core.Infra;
-using Entities = StudentApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StudentApp.Domain.Entities;
-using Mapster;
 
 namespace StudentApp.Core.Feature.Student.Put
 {

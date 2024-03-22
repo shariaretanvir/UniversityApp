@@ -1,11 +1,5 @@
 ﻿using MapsterMapper;
 using MediatR;
-using Entities = StudentApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StudentApp.Core.Infra;
 using StudentApp.Domain.Entities;
 
