@@ -28,8 +28,6 @@ namespace StudentApp.Core.Feature.Student.Put
             
             if(student != null)
             {
-                //var config = TypeAdapterConfig<MappingProfile, Entities.StudentAddress>.NewConfig();
-                var configEdit = TypeAdapterConfig<StudentAddressMappingProfile, Entities.StudentAddress>.NewConfig();
                 _mapper.Map(request, student);
                 var addresses = _unitOfWork.GetRepository<Entities.StudentAddress, Guid>().Query(x => x.Student).Where(x => x.Student.Id == student.Id).ToList();
 
