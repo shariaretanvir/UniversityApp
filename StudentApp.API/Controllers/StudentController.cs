@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.API.Common;
+using StudentApp.Core.Common;
 using StudentApp.Core.Feature.Student.Delete;
+using StudentApp.Core.Feature.Student.Get;
 using StudentApp.Core.Feature.Student.Post;
 using StudentApp.Core.Feature.Student.Put;
 
@@ -35,6 +37,12 @@ namespace StudentApp.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             return Ok(APIResponse<DeleteStudentResponse>.Success(await _mediator.Send(new DeleteStudentCommand { Id = id }), ""));
+        }
+
+        [HttpGet(Name = "GetStudents")]
+        public async Task<IActionResult> Get([FromQuery] ResourceParameters resourceParameters)
+        {
+            return Ok(APIResponse<GetStudentResponse>.Success(await _mediator.Send(new GetStudentRequest { ResourceParameters = resourceParameters }), ""));
         }
     }
 }

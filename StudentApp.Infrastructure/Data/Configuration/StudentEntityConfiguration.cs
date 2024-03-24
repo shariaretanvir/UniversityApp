@@ -14,7 +14,8 @@ namespace StudentApp.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Student> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).IsRequired();            
+            builder.Property(x => x.Name).IsRequired();
+            //builder.Ignore(x => x.StudentAddresses);
         }
     }
 }

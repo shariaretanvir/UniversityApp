@@ -14,6 +14,13 @@ namespace StudentApp.Domain.Entities
         public int Age { get; private set; }
         public bool IsActive { get; private set; }
 
+        private readonly List<StudentAddress> _studentAddresses = new();
+        public IReadOnlyCollection<StudentAddress> StudentAddresses
+        {
+            get => _studentAddresses.ToList();
+            private set { }
+        }
+
         public Student(Guid id, string name, int age, bool isActive)
         {
             Id = id;

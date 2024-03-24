@@ -51,6 +51,12 @@ builder.Services.AddDbContext<StudentDbContext>(ops =>
     ops.UseSqlServer(builder.Configuration["ConnectionStrings:StudentConnectionString"]).EnableSensitiveDataLogging();
 });
 
+//inject repository
+builder.Services.Scan(scan => scan.FromAssemblies(AppDomain.CurrentDomain.Load("StudentApp.Infrastructure"))
+    .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Repository")))
+    .AsImplementedInterfaces()
+    .WithTransientLifetime());
+
 //cors
 builder.Services.CustomCORS();
 

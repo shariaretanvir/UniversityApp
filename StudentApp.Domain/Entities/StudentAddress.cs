@@ -13,6 +13,7 @@ namespace StudentApp.Domain.Entities
         public override Guid Id { get; protected set; }
         public AddressType AddressType { get; private set; }
         public string FullAddress { get; private set; }
+        public Guid StudentId { get; private set; }
         public Student Student { get; private set; }
 
         public StudentAddress(Guid id, AddressType addressType, string fullAddress)

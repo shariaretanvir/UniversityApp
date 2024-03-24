@@ -16,7 +16,7 @@ namespace StudentApp.Infrastructure.Data.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.AddressType).IsRequired().HasConversion<int>(); //.HasColumnType("nvarchar(20)");
             builder.Property(x=>x.FullAddress).IsRequired();
-            builder.HasOne(x => x.Student).WithMany().HasForeignKey("StudentId").OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Student).WithMany(x=>x.StudentAddresses).HasForeignKey("StudentId").OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
