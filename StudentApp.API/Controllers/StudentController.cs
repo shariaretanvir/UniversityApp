@@ -10,7 +10,7 @@ using StudentApp.Core.Feature.Student.Put;
 
 namespace StudentApp.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/studentapi/[controller]")]
     [ApiController]
     public class StudentController : BaseController
     {
