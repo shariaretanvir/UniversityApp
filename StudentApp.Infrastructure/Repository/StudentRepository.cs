@@ -15,11 +15,9 @@ namespace StudentApp.Infrastructure.Repository
 {
     public class StudentRepository : GenericRepository<Student, Guid>, IRepository
     {
-        private readonly StudentDbContext _dbContext;
 
         public StudentRepository(StudentDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
         public async Task<PagedList<Student>> GetAll(ResourceParameters resourceParameters)
         {

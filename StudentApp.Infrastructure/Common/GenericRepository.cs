@@ -13,7 +13,7 @@ namespace StudentApp.Infrastructure.Common
 {
     public class GenericRepository<T, TKey> : IGenericRepository<T, TKey> where T : Entity<TKey>
     {
-        private readonly StudentDbContext _dbContext;
+        protected readonly StudentDbContext _dbContext;
 
         public GenericRepository(StudentDbContext dbContext)
         {

@@ -2,14 +2,12 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mapster;
 using MapsterMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentApp.API.Extentions;
 using StudentApp.API.Middleware;
 using StudentApp.Core.Infra;
 using StudentApp.Infrastructure.Common;
 using StudentApp.Infrastructure.Data;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +47,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StudentDbContext>(ops =>
 {
     ops.UseSqlServer(builder.Configuration["ConnectionStrings:StudentConnectionString"]).EnableSensitiveDataLogging();
-});
+}, ServiceLifetime.Scoped);
 
 //inject repository
 builder.Services.Scan(scan => scan.FromAssemblies(AppDomain.CurrentDomain.Load("StudentApp.Infrastructure"))
