@@ -12,7 +12,8 @@ namespace AuthApp.API.Controllers
     {
         public ApplicationUserController(IMediator mediator) : base(mediator) { }
         
-        [HttpPost(Name = "SaveApplicationUser")]
+        [HttpPost]
+        [Route("SaveApplicationUser")]
         public async Task<IActionResult> Post([FromBody] PostApplicationUserCommand command)
         {
             return Ok(APIResponse<PostApplicationResponse>.Success(await _mediatR.Send(command)));

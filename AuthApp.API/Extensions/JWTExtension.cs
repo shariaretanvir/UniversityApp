@@ -17,13 +17,13 @@ namespace AuthApp.API.Extensions
             {
                 c.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
                     ValidIssuer = configuration["JWTSettings:Issuer"],
                     ValidAudience = configuration["JWTSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:SecretKey"])),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:SecretKey"]))
                 };
             });
 

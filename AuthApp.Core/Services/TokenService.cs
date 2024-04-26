@@ -27,13 +27,17 @@ namespace AuthApp.Core.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
-                new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName)
+                new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName)                
             };
+            if(applicationUser.UserName == "Akash")
+            {
+                claims.Add(new Claim(ClaimTypes.Role, string.Join(",", "Admin")));
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMinutes(2),
                 Issuer = Configuration["JWTSettings:Issuer"],
                 Audience = Configuration["JWTSettings:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)

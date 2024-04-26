@@ -11,6 +11,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 //global exception middleware
 builder.Services.AddScoped<GlobalExceptionMiddleware>();
 //cors
@@ -52,6 +53,9 @@ builder.Services.AddDbContext<AuthAppDbContext>(options =>
 builder.Services.JTWAuthConfig(builder.Configuration);
 builder.Services.AddAuthorization();
 
+//swagger
+builder.Services.AddSwaggerConfig();
+
 //custom
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -63,9 +67,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ui => ui.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth Api"));
 }
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseCors("MyCustomCORSPolicy");
 app.UseHttpsRedirection();
 

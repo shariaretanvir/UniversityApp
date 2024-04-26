@@ -14,33 +14,41 @@ namespace AuthApp.API.MIddlewares
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-			try
-			{
+            try
+            {
                 await next.Invoke(context);
-                if(context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
                 {
-                    _logger.LogError("UnAuthorize request");
-                    await PrepareAuthorizeResponse(context);
+                    await PrepareAuthorizeResponse(context, "UnAuthorize request");
                 }
-			}
-			catch (Exception e)
-			{
-                _logger.LogError(e.Message);
+                if(context.Response.StatusCode == StatusCodes.Status403Forbidden)
+                {
+                    await PrepareAuthorizeResponse(context, "Access Forbidden");
+                }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                await PrepareAuthorizeResponse(context, e.Message);
+            }
+            catch (Exception e)
+            {
                 await PrepareErrorResponse(context, e);
-			}
+            }
         }
 
         public async Task PrepareErrorResponse(HttpContext context, Exception e)
         {
+            _logger.LogError(e.Message);
             context.Response.ContentType = "application/json";
             var response = JsonSerializer.Serialize(APIResponse<string>.Error(e.Message, "Internal Server Errror", 500), StaticDeclaration.camelCase);
             await context.Response.WriteAsync(response);
         }
 
-        public async Task PrepareAuthorizeResponse(HttpContext context)
+        public async Task PrepareAuthorizeResponse(HttpContext context, string errorMessage = "")
         {
+            _logger.LogError(errorMessage);
             context.Response.ContentType = "application/json";
-            var response = JsonSerializer.Serialize(APIResponse<string>.Error("", "UnAuthorize access requested"), StaticDeclaration.camelCase);
+            var response = JsonSerializer.Serialize(APIResponse<string>.Error("", errorMessage, 401), StaticDeclaration.camelCase);
             await context.Response.WriteAsync(response);
         }
     }
