@@ -15,10 +15,13 @@ namespace AuthApp.API.Controllers
             
         }
 
-        [HttpPost(Name = "Login")]
+        [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] PostLoginCommand command)
         {
             return Ok(APIResponse<PostLoginResponse>.Success(await _mediatR.Send(command)));
         }
+
+        
     }
 }

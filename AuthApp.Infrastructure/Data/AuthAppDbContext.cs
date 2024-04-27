@@ -19,6 +19,7 @@ namespace AuthApp.Infrastructure.Data
 
         //dbset
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -41,6 +42,7 @@ namespace AuthApp.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             new ApplicationUserEntityConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
+            new UserTokenEntityConfiguration().Configure(modelBuilder.Entity<UserToken>());
         }
     }
 }

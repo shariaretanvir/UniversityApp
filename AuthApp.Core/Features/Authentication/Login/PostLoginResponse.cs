@@ -1,5 +1,5 @@
 ﻿namespace AuthApp.Core.Features.Authentication.Login
 {
-    public record PostLoginResponse(bool isAuthenticate,string token);
+    public record PostLoginResponse(bool isAuthenticate,string token, string refreshToken);
     
 }
