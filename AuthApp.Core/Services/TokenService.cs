@@ -27,18 +27,21 @@ namespace AuthApp.Core.Services
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
-                new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName)                
+                new Claim(ClaimTypes.Email, applicationUser.Email),
+                new Claim(ClaimTypes.Name, applicationUser.UserName)                
             };
             if(applicationUser.UserName == "Akash")
             {
                 claims.Add(new Claim(ClaimTypes.Role, string.Join(",", "Admin")));
             }
+            TimeZoneInfo bstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"); // BST timezone
+            DateTime calculatedDateTime = DateTime.UtcNow.AddMinutes(Convert.ToDouble(Configuration["JWTSettings:AccessTokenValidityInMinutes"]));
+            DateTime bstDateTime = TimeZoneInfo.ConvertTimeFromUtc(calculatedDateTime, bstTimeZone);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(Configuration["JWTSettings:AccessTokenValidityInMinutes"])),
+                Expires = bstDateTime,
                 Issuer = Configuration["JWTSettings:Issuer"],
                 Audience = Configuration["JWTSettings:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)

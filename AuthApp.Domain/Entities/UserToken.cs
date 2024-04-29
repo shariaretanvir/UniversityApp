@@ -10,16 +10,17 @@ namespace AuthApp.Domain.Entities
     public class UserToken : Entity<Guid>, IAudit
     {
         public Guid UserId { get; private set; }
-        public string AccessToken { get; private set; }
+        //public string AccessToken { get; private set; }
         public string RefreshToken { get; private set; }
         public DateTime RefreshTokenExpiryDateTime { get; private set; }
         public bool IsActive { get; private set; }
+        public ApplicationUser ApplicationUser { get; private set; }
 
-        public UserToken(Guid id, Guid userId, string accessToken, string refreshToken, DateTime refreshTokenExpiryDateTime, bool isActive)
+        public UserToken(Guid id, Guid userId, string refreshToken, DateTime refreshTokenExpiryDateTime, bool isActive)
         {
             Id = id;
             UserId = userId;
-            AccessToken = accessToken;
+            //AccessToken = accessToken;
             RefreshToken = refreshToken;
             RefreshTokenExpiryDateTime = refreshTokenExpiryDateTime;
             IsActive = isActive;

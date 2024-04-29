@@ -1,4 +1,5 @@
-﻿using AuthApp.Core.Infra;
+﻿using AuthApp.Core.Common;
+using AuthApp.Core.Infra;
 using AuthApp.Core.Services;
 using AuthApp.Domain.Entities;
 using MediatR;
@@ -36,11 +37,26 @@ namespace AuthApp.Core.Features.Authentication.Login
             {
                 var token = _tokenService.CreateToken(user);
                 var refreshToken = _tokenService.CreateRefreshToken();
-                var refreshTokenExpiry = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JWTSettings:RefreshTokenValidityInDays"]));
-                var userToken = new UserToken(Guid.NewGuid(), user.Id ,token, refreshToken, refreshTokenExpiry, true);
-                await _unitOfWork.GetRepository<Entities.UserToken, Guid>().AddAsync(userToken);
+                
+                DateTime calculatedDateTime = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JWTSettings:RefreshTokenValidityInDays"]));
+                
+                var refreshTokenExpiry = StaticDeclaration.GetActualBstTime(calculatedDateTime); ;
 
-                if(await _unitOfWork.CommitAsync() > 0)
+                var existingUserToken = _unitOfWork.GetRepository<Entities.UserToken, Guid>().Query().Where(x => x.UserId == user.Id && x.IsActive == true).FirstOrDefault();
+
+                if (existingUserToken is null)
+                {
+                    var userToken = new UserToken(Guid.NewGuid(), user.Id, refreshToken, refreshTokenExpiry, true);
+                    await _unitOfWork.GetRepository<Entities.UserToken, Guid>().AddAsync(userToken);
+                }
+                else
+                {
+                    existingUserToken.SetRefreshToken(refreshToken);
+                    existingUserToken.SetRefreshTokenExpiry(refreshTokenExpiry);
+                    _unitOfWork.GetRepository<Entities.UserToken, Guid>().Update(existingUserToken);
+                }
+
+                if (await _unitOfWork.CommitAsync() > 0)
                 {
                     return new PostLoginResponse(true, token, refreshToken);
                 }

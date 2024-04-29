@@ -14,11 +14,13 @@ namespace AuthApp.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<UserToken> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x=>x.UserId).IsRequired();
-            builder.Property(x => x.AccessToken).IsRequired();
+            builder.Property(x => x.UserId).IsRequired();
+            //builder.Property(x => x.AccessToken).IsRequired();
             builder.Property(x => x.RefreshToken).IsRequired();
             builder.Property(x => x.RefreshTokenExpiryDateTime).IsRequired();
-            builder.Property(x=>x.IsActive).HasDefaultValue(true);
+            builder.Property(x => x.IsActive).HasDefaultValue(true);
+
+            builder.HasOne(x => x.ApplicationUser).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
