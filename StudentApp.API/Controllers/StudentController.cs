@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.API.Common;
@@ -10,6 +11,7 @@ using StudentApp.Core.Feature.Student.Put;
 
 namespace StudentApp.API.Controllers
 {
+    [Authorize]
     [Route("api/studentapi/[controller]")]
     [ApiController]
     public class StudentController : BaseController
@@ -21,25 +23,29 @@ namespace StudentApp.API.Controllers
             _logger = logger;
         }
 
-        [HttpPost(Name = "SaveStudent")]
+        [HttpPost]
+        [Route("SaveStudent")]
         public async Task<IActionResult> Post([FromBody] PostStudentCommand command)
         {
             return Ok(APIResponse<PostStudentResponse>.Success(await _mediator.Send(command), "Saved"));
         }
 
-        [HttpPut(Name = "UpdateStudent")]
+        [HttpPut]
+        [Route("UpdateStudent")]
         public async Task<IActionResult> Put([FromBody] PutStudentCommand command)
         {
             return Ok(APIResponse<PutStudentResponse>.Success(await _mediator.Send(command), ""));
         }
 
-        [HttpDelete(Name = "DeleteStudent")]
+        [HttpDelete]
+        [Route("DeleteStudent")]
         public async Task<IActionResult> Delete(Guid id)
         {
             return Ok(APIResponse<DeleteStudentResponse>.Success(await _mediator.Send(new DeleteStudentCommand { Id = id }), ""));
         }
 
-        [HttpGet(Name = "GetStudents")]
+        [HttpGet]
+        [Route("GetStudents")]
         public async Task<IActionResult> Get([FromQuery] ResourceParameters resourceParameters)
         {
             return Ok(APIResponse<GetStudentResponse>.Success(await _mediator.Send(new GetStudentRequest { ResourceParameters = resourceParameters }), ""));

@@ -41,7 +41,6 @@ builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //efcore
 builder.Services.AddDbContext<StudentDbContext>(ops =>
@@ -58,9 +57,17 @@ builder.Services.Scan(scan => scan.FromAssemblies(AppDomain.CurrentDomain.Load("
 //cors
 builder.Services.CustomCORS();
 
+//jwtauth
+builder.Services.JWTAuthConfig(builder.Configuration);
+builder.Services.AddAuthorization();
+
+//swagger
+builder.Services.SwaggerConfig();
+
 //custom
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<GlobalExceptionMiddleware>();
+
 
 var app = builder.Build();
 
@@ -68,13 +75,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ui => ui.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth Api"));
 }
 app.UseCors("MyCustomCorsPolicy");
 app.UseHttpsRedirection();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

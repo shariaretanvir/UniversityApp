@@ -52,7 +52,7 @@ namespace AuthApp.Core.Features.Authentication.RefreshToken
 
             var userToken = _unitOfWork.GetRepository<Entities.UserToken, Guid>().Query(x => x.ApplicationUser).FirstOrDefault(x => x.UserId == user.Id && x.IsActive == true);
 
-            if (userToken == null || userToken.RefreshToken != request.RefreshToken || userToken.RefreshTokenExpiryDateTime <= DateTime.UtcNow)
+            if (userToken == null || userToken.RefreshToken != request.RefreshToken || userToken.RefreshTokenExpiryDateTime <= StaticDeclaration.GetActualBstTime(DateTime.UtcNow))
             {
                 throw new Exception("Token not matched or expired");
             }
